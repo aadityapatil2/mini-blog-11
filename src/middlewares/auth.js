@@ -1,12 +1,8 @@
 const blogModel = require("../models/blogModel");
 const jwt = require("jsonwebtoken");
 
-
-
 const blogAuthorise = async function (req, res, next) {
     try {
-
-
         let blogId = req.params.blogId;
         if (!blogId)
             return res.status(404).send({ status: false, msg: "enter a blog ID" })
@@ -24,6 +20,8 @@ const blogAuthorise = async function (req, res, next) {
         return res.status(500).send({ status: false, msg: error.message })
     }
 }
+// ============================================= authenticate ==================================================
+
 const authenticate = function (req, res, next) {
     try {
         let token = req.headers["x-api-key"];
@@ -38,10 +36,8 @@ const authenticate = function (req, res, next) {
     catch (error) {
         return res.status(500).send({ status: false, msg: error.message })
     }
-
 }
-
-
+// ================================================== authorise ================================================
 const authorise = async function (req, res, next) {
     try {
         let token = req["x-api-key"];
@@ -70,9 +66,8 @@ const authorise = async function (req, res, next) {
     catch (error) {
         return res.status(500).send({ status: false, msg: error.message })
     }
-
 }
-
+// ========================================== deleteAuthorised ==================================================
 const deleteAuthorised = async function (req, res, next) {
     try {
         let token = req["x-api-key"];
@@ -92,10 +87,11 @@ const deleteAuthorised = async function (req, res, next) {
             req.data = data
             next()
         };
-
     } catch (error) {
         return res.status(500).send({ status: false, msg: error.message })
 
     }
 }
 module.exports = { blogAuthorise, authenticate, authorise, deleteAuthorised }
+
+// XX====================================================================================================XX

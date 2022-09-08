@@ -18,7 +18,7 @@ const createAuthor = async function (req, res) {
         if (typeof fname !== "string" || fname[0] == " " || fname[fname.length - 1] == " " || !fname.match(regexValidation)) {
             return res.status(400).send({ status: false, msg: "please enetr a valid firstname" })
         }
-        if (typeof lname !== "string" || lname[0] == " " || lname[lname.length - 1] == " " || !fname.match(regexValidation)) {
+        if (typeof lname !== "string" || lname[0] == " " || lname[lname.length - 1] == " " || !lname.match(regexValidation)) {
             return res.status(400).send({ status: false, msg: "please enetr a valid lastname" })
         }
         if (title !== "Mr" && title !== "Mrs" && title !== "Miss") {
@@ -29,17 +29,14 @@ const createAuthor = async function (req, res) {
         if (findEmail) {
             return res.status(400).send({ status: false, msg: "email id already exsits" })
         }
-        fname.trim()
 
         let authorCreated = await authorModel.create(data)
         res.status(201).send({ status: true, data: authorCreated })
     } catch (error) {
         res.status(500).send({ status: false, msg: error.message })
     }
-
 }
-
-// ==========================================================================================================
+// =================================================== login ===================================================
 
 const login = async function (req, res) {
     let email = req.body.email;
@@ -61,3 +58,4 @@ const login = async function (req, res) {
 }
 
 module.exports = { createAuthor, login }
+// XX==========================================================================================================XX

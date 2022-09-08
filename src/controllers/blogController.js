@@ -2,7 +2,7 @@ const authorModel = require("../models/authorModel")
 const blogModel = require("../models/blogModel")
 let timeElapsed = Date.now();
 let today = new Date(timeElapsed);
-// =================================createBlog====================================================
+// ======================================= createBlog =========================================================
 const createBlog = async function (req, res) {
     try {
         let data = req.body
@@ -31,7 +31,7 @@ const createBlog = async function (req, res) {
     }
 
 }
-// =============================================================================================
+// ========================================= getBlogs ========================================================
 const getBlogs = async function (req, res) {
 
     try {
@@ -57,7 +57,7 @@ const getBlogs = async function (req, res) {
         res.status(500).send({ status: false, msg: error.message })
     }
 }
-// =============================================================================================
+// ======================================== updateBlog ========================================================
 
 const updateBlog = async function (req, res) {
     try {
@@ -86,7 +86,7 @@ const updateBlog = async function (req, res) {
         res.status(500).send({ status: false, msg: error.message })
     }
 }
-// =============================================================================================
+// ============================================ deleteBlogsParam ==============================================
 
 const deleteBlogsParam = async (req, res) => {
     try {
@@ -98,7 +98,7 @@ const deleteBlogsParam = async (req, res) => {
         res.status(500).send({ status: false, msg: error.message })
     }
 }
-// =============================================================================================
+// ============================================ deleteBlogsQuery =============================================
 
 const deleteBlogsQuery = async function (req, res) {
     try {     
@@ -119,3 +119,5 @@ const deleteBlogsQuery = async function (req, res) {
 }
 
 module.exports = { getBlogs, createBlog, updateBlog, deleteBlogsParam, deleteBlogsQuery }
+
+// XX==========================================================================================================XX
