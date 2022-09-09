@@ -31,7 +31,7 @@ const createBlog = async function (req, res) {
     }
 
 }
-// =============================================================================================
+// =======================================getBlogs======================================================
 const getBlogs = async function (req, res) {
 
     try {
@@ -57,7 +57,7 @@ const getBlogs = async function (req, res) {
         res.status(500).send({ status: false, msg: error.message })
     }
 }
-// =============================================================================================
+// =======================================updateBlog======================================================
 
 const updateBlog = async function (req, res) {
     try {
@@ -86,19 +86,19 @@ const updateBlog = async function (req, res) {
         res.status(500).send({ status: false, msg: error.message })
     }
 }
-// =============================================================================================
+// ========================================deleteBolgparam=====================================================
 
 const deleteBlogsParam = async (req, res) => {
     try {
-
-        await blogModel.updateOne((req.valid), { $set: { isDeleted: true, deletedAt: today } })
+        let data = req.valid
+        await blogModel.updateOne((data), { $set: { isDeleted: true, deletedAt: today } })
         return res.status(200).send()
     }
     catch (error) {
         res.status(500).send({ status: false, msg: error.message })
     }
 }
-// =============================================================================================
+// ===========================================deleteBlogQuery==================================================
 
 const deleteBlogsQuery = async function (req, res) {
     try {     

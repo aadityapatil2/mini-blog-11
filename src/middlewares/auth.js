@@ -1,35 +1,16 @@
 const blogModel = require("../models/blogModel");
 const jwt = require("jsonwebtoken");
 
+// =================================authenticate===============================================
 
-
-const blogAuthorise = async function (req, res, next) {
-    try {
-
-
-        let blogId = req.params.blogId;
-        if (!blogId)
-            return res.status(404).send({ status: false, msg: "enter a blog ID" })
-        if (blogId.length > 24 || blogId.length < 24)
-            return res.status(400).send({ status: false, msg: "Invalid ID" })
-        let valid = await blogModel.findById(blogId)
-        if (!valid)
-            return res.status(404).send({ status: false, msg: "invalid blog ID" })
-        if (valid.isDeleted == true)
-            return res.status(404).send({ status: false, msg: "no such blog exists" })
-        req.valid = valid
-        next();
-    }
-    catch (error) {
-        return res.status(500).send({ status: false, msg: error.message })
-    }
-}
 const authenticate = function (req, res, next) {
     try {
         let token = req.headers["x-api-key"];
         if (!token) {
             token = req.headers["x-Api-key"]
-        } if (!token) return res.status(403).send({ status: false, msg: "Request Is Missing A Mandatory Header" })
+        }
+        if (!token) return res.status(403).send({ status: false, msg: "Request Is Missing A Mandatory Header" })
+
         let decodedToken = jwt.verify(token, "room-no-11");
         if (!decodedToken) return res.status(403).send({ status: false, msg: "InValid Token" });
         req["x-api-key"] = decodedToken;
@@ -41,6 +22,7 @@ const authenticate = function (req, res, next) {
 
 }
 
+// ================================authorise================================================
 
 const authorise = async function (req, res, next) {
     try {
@@ -66,17 +48,42 @@ const authorise = async function (req, res, next) {
                 return res.status(401).send({ status: false, msg: "UnAuthorised" });
             next()
         };
+        next()
     }
     catch (error) {
         return res.status(500).send({ status: false, msg: error.message })
     }
 
 }
+// ================================blogvalid================================================
+const blogvalid = async function (req, res, next) {
+    try {
+
+
+        let blogId = req.params.blogId;
+        if (!blogId)
+            return res.status(404).send({ status: false, msg: "enter a blog ID" })
+        if (blogId.length > 24 || blogId.length < 24)
+            return res.status(400).send({ status: false, msg: "Invalid ID" })
+        let valid = await blogModel.findById(blogId)
+        if (!valid)
+            return res.status(404).send({ status: false, msg: "invalid blog ID" })
+        if (valid.isDeleted == true)
+            return res.status(404).send({ status: false, msg: "no such blog exists" })
+        req.valid = valid
+        next();
+    }
+    catch (error) {
+        return res.status(500).send({ status: false, msg: error.message })
+    }
+}
+// =============================deleteAuthorised===================================================
 
 const deleteAuthorised = async function (req, res, next) {
     try {
         let token = req["x-api-key"];
         let data = req.query
+
         if (Object.keys(data).length == 0)
             return res.status(400).send({ status: false, msg: "please enter data to update" })
 
@@ -85,6 +92,7 @@ const deleteAuthorised = async function (req, res, next) {
                 return res.status(401).send({ status: false, msg: "UnAuthorised" });
             next()
         };
+
         if (Object.keys(req.query).length > 0) {
             const data = await blogModel.findOne(req.query)
 
@@ -98,4 +106,6 @@ const deleteAuthorised = async function (req, res, next) {
 
     }
 }
-module.exports = { blogAuthorise, authenticate, authorise, deleteAuthorised }
+
+
+module.exports = { blogvalid, authenticate, authorise, deleteAuthorised }

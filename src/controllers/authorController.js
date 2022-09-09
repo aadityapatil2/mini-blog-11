@@ -1,6 +1,7 @@
 const authorModel = require("../models/authorModel")
 const jwt = require("jsonwebtoken")
 let regexValidation = /^[a-zA-Z]+([\s][a-zA-Z]+)*$/;
+// ==============================================createAuthor==============================================
 
 const createAuthor = async function (req, res) {
     try {
@@ -24,12 +25,14 @@ const createAuthor = async function (req, res) {
         if (title !== "Mr" && title !== "Mrs" && title !== "Miss") {
             return res.status(400).send({ status: false, msg: "please enter  Mr or Mrs or Miss" })
         }
+        if (password.length > 10 || password.length < 4)
+            return res.status(400).send({ status: false, msg: "password should be less than 10 & greater than 4" })
+
         let findEmail = await authorModel.findOne({ email: email })
 
         if (findEmail) {
             return res.status(400).send({ status: false, msg: "email id already exsits" })
         }
-        fname.trim()
 
         let authorCreated = await authorModel.create(data)
         res.status(201).send({ status: true, data: authorCreated })
@@ -39,7 +42,7 @@ const createAuthor = async function (req, res) {
 
 }
 
-// ==========================================================================================================
+// ================================login=======================================================
 
 const login = async function (req, res) {
     let email = req.body.email;
@@ -59,5 +62,7 @@ const login = async function (req, res) {
     res.setHeader("x-api-key", token);
     return res.status(200).send({ status: true, data: { token: token } })
 }
+
+
 
 module.exports = { createAuthor, login }
